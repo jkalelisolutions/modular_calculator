@@ -22,12 +22,12 @@ class checkins(BaseModel):
     weight: int
     bmi: str
 
-app.get("/")
+@app.get("/")
 def home():
     return{"Status Response: 200"
            "Calculator API is running."}
 
-app.get("/api/checkin")
+@app.get("/api/checkin")
 def load_checkins():
     if  os.path.exists("calculator.json"):
         
@@ -41,9 +41,10 @@ def load_checkins():
                     "Checking file location..."}
         pass
       return {"BMI_Records":[], "Protocol":[] ,"weekly_Report":[]}
+    return {"BMI_Records":[], "Protocol":[] ,"weekly_Report":[]}
         
 #======== Calculate Body Mass Index ========
-app.post("/api/calculate_bmi")
+@app.post("/api/calculate_bmi")
 def calculate_bmi(weight_kg,height_m):
      
      data=load_checkins()
@@ -76,13 +77,13 @@ def calculate_bmi(weight_kg,height_m):
 
     
 #======== Calculate Calorie Estimate : Default;0.04 ========
-app.get("/api/calories")
+@app.get("/api/calories")
 def estimate_calories(steps, calorie_per_step= 0.04):
     calories = steps*calorie_per_step
     return math.floor(calories)
 
 #======== Check Step Goal ========
-app.get("/api/summary")
+@app.get("/api/summary")
 def weekly_step_summary(steps_list, goal=8000):
     new= load_checkins()
     if not isinstance(new,dict):
@@ -98,13 +99,11 @@ def weekly_step_summary(steps_list, goal=8000):
     new["weekly_Report"].append(summary)
     with open("calculator.json","w") as f:
         json.dump(new,f,indent=4)
-        return{"Status: 200"
-               "Weekly report updated"
-               "summary":summary}
+        return{"Status: 200"},{"Summary":summary}
     
 
 #======== Check Protocol Summary ========
-app.get("/api/protocol")
+@app.get("/api/protocol")
 def protocol_summary(plist):
     unique = list(set(plist))
     summary = {}
@@ -113,36 +112,35 @@ def protocol_summary(plist):
     return summary
 
 #======== Math calculations ========
-app.post("/api/addition")
+@app.post("/api/addition")
 def addition(a,b):
     return (a+b)
 
-app.post("/api/subtraction")
+@app.post("/api/subtraction")
 def subtraction(a,b):
     return (a-b)
 
-app.post("/api/multiplication")
+@app.post("/api/multiplication")
 def multiplication(a,b):
     return (a*b)
 
-app.post("/api/division")
+@app.post("/api/division")
 def division(a,b):
     return (a/b)
 
-app.post("/api/square_root")
+@app.post("/api/square_root")
 def square_root(a):
     return math.sqrt(a)
 
-app.post("/api/percentage")
+@app.post("/api/percentage")
 def percentage(a,b,y=100):
     return (a*b/y)
 
-app.post("/app/power_of")
+@app.post("/api/power_of")
 def power_of(a,b):
     return (a**b)
 
 #======== The REP Estimator =======
-app.post("/api/rep_estimator")
+@app.post("/api/rep_estimator")
 def one_rep_estimator(weight_kg, r):
     return round(weight_kg*(1+r/30),2)
-home()
