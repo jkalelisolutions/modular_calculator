@@ -1,0 +1,22 @@
+{
+    "BMI_Records": [
+        "Normal Weight",
+        "Overweight"
+    ],
+    "weekly_Report": [
+        {
+            "today": "28 Sep 26",
+            "days_hit": 4,
+            "average": 8194.3,
+            "best": 12500,
+            "worst": 2300
+        },
+        {
+            "today": "28 Sep 26",
+            "days_hit": 4,
+            "average": 8552.7,
+            "best": 13500,
+            "worst": 2350
+        }
+    ]
+}
