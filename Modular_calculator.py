@@ -71,6 +71,7 @@ def calculate_bmi(weight_kg: float, height_m: float):
              json.dump(data,f,indent=4)
              return {"bmi": res, "category": category}
          except json.JSONDecodeError:return {"Failed to store data. Try again later"}
+     return {"bmi": res, "category": category}   
              
          
         
