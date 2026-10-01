@@ -108,7 +108,7 @@ const CalculateBMI = async (weight_kg, height_m,event) => {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
     const result = await response.json();
-    html = `<p>Your BMI is: ${result.bmi}</p><p>BMI Category: ${result.category}</p>`;
+    const html = `<p>Your BMI is: ${result.bmi}</p><p>BMI Category: ${result.category}</p>`;
     document.getElementById("bmi-result").innerHTML = html;
 }
 document.addEventListener("DOMContentLoaded", () => {
