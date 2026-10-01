@@ -1,10 +1,6 @@
 {
     "BMI_Records": [
-        "Normal Weight",
-        "Overweight",
-        "Underweight",
-        "Underweight",
-        "Overweight",
+        "Obese",
         "Normal Weight"
     ],
     "weekly_Report": [
