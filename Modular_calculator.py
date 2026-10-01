@@ -45,14 +45,14 @@ def load_checkins():
         
 #======== Calculate Body Mass Index ========
 @app.post("/api/calculate_bmi")
-def calculate_bmi(weight_kg,height_m):
+def calculate_bmi(weight_kg: float, height_m: float):
      
      data=load_checkins()
      if not isinstance(data,dict):
          data= {"BMI_Records":[]}
      if not isinstance(data.get("BMI_Records"),list):
          data["BMI_Records"]=[]
-     bmi = weight_kg/(height_m**2)
+     bmi = weight_kg/((height_m/100)**2)
      res = round(bmi,1)
     
      if res < 18.5:
@@ -69,7 +69,7 @@ def calculate_bmi(weight_kg,height_m):
      with open("calculator.json","w") as f:
          try:
              json.dump(data,f,indent=4)
-             return  {"message": True, "Data Stored":category}
+             return {"bmi": res, "category": category}
          except json.JSONDecodeError:return {"Failed to store data. Try again later"}
              
          
