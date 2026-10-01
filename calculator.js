@@ -62,15 +62,26 @@ const loadAndDisplayTable = async () => {
     try {
         const data = await Checkin(); 
         // Assuming your backend returns {"BMI_Records": ["Overweight", "Normal Weight"]}
-        renderCheckinsTable(data.BMI_Records, "table-container");
+        renderCheckinsTable(data.BMI_Records, "bmi-container");
+        renderCheckinsTable(data.weekly_Report, "weekly-container");
     } catch (error) {
         console.error("Failed to load records:", error);
     }
 };
  
 //======== Calculate Body Mass Index ========
+
+
+
 //Creation of the form that will take the weight and height of the user and send it to the backend for BMI calculation
 const form = document.getElementById("bmi-form");
+//button to show the BMI checker form
+const bmiCheckerButton = document.getElementById("bmi-checker");
+bmiCheckerButton.addEventListener("click", (event) => {
+   event.preventDefault(); 
+   form.style.display = "block"; // Show the form when the button is clicked
+
+});
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
     form.querySelector("button").disabled = true; // Disable the button to prevent multiple submissions
@@ -78,12 +89,18 @@ form.addEventListener("submit", async (event) => {
    
     const weight = Number(document.getElementById("weight").value);
     const height = Number(document.getElementById("height").value);
-    if (!weight || height) {
-        await CalculateBMI(weight, height);
+    if (!weight || !height) {
+        alert("Please enter valid weight and height values.");
+        form.querySelector("button").disabled = false;
+        form.querySelector("button").textContent = "Calculate BMI";
+        return;
     }
+    await CalculateBMI(weight, height);
 });
 
-const CalculateBMI = async (weight_kg, height_m) => {
+
+const CalculateBMI = async (weight_kg, height_m,event) => {
+    event?.preventDefault();
     const response = await fetch(`${API_BASE}/api/calculate_bmi?weight_kg=${weight_kg}&height_m=${height_m}`,
         {method:"POST"}
     );
