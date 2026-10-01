@@ -72,21 +72,19 @@ const loadAndDisplayTable = async () => {
 //======== Calculate Body Mass Index ========
 
 
-
-//Creation of the form that will take the weight and height of the user and send it to the backend for BMI calculation
-const form = document.getElementById("bmi-form");
 //button to show the BMI checker form
 const bmiCheckerButton = document.getElementById("bmi-checker");
 bmiCheckerButton.addEventListener("click", (event) => {
+    
    event.preventDefault(); 
    form.style.display = "block"; // Show the form when the button is clicked
 
 });
+//Creation of the form that will take the weight and height of the user and send it to the backend for BMI calculation
+const form = document.getElementById("bmi-form");
+
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    form.querySelector("button").disabled = true; // Disable the button to prevent multiple submissions
-    form.querySelector("button").textContent = "Calculating..."; // Change button text to indicate processing
-   
     const weight = Number(document.getElementById("weight").value);
     const height = Number(document.getElementById("height").value);
     if (!weight || !height) {
@@ -99,8 +97,8 @@ form.addEventListener("submit", async (event) => {
 });
 
 
-const CalculateBMI = async (weight_kg, height_m,event) => {
-    event?.preventDefault();
+const CalculateBMI = async (weight_kg, height_m) => {
+    
     const response = await fetch(`${API_BASE}/api/calculate_bmi?weight_kg=${weight_kg}&height_m=${height_m}`,
         {method:"POST"}
     );
