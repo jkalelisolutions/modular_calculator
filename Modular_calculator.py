@@ -122,43 +122,38 @@ def protocol_summary(plist):
 
 #======== Math calculations ========
 @app.post("/api/addition")
-def addition(a,b):
-    sum = (a+b)
-    return {"Result":sum}
+def addition(a: float,b: float):
+    return {"Result":(a+b)}
 
 @app.post("/api/subtraction")
-def subtraction(a,b):
-    sub = (a-b)
-    return {"Result":sub}
+def subtraction(a: float,b: float):
+    return {"Result": (a-b)}
 
 @app.post("/api/multiplication")
-def multiplication(a,b):
-    mult = (a*b)
-    return {"Result":mult}
+def multiplication(a: float,b: float):
+    return {"Result":(a*b)}
 
 @app.post("/api/division")
-def division(a,b):
+def division(a: float,b: float):
     if b == 0:
         raise HTTPException(status_code=400, detail="Division by zero is not allowed.")
-    div = (a/b)
-    return {"Result":div}
+    return {"Result":(a/b)}
 
 @app.post("/api/square_root")
-def square_root(a):
+def square_root(a:float):
     if a < 0:
         raise HTTPException(status_code=400, detail="Square root of negative number is not allowed.")
-    
     return {"Result": math.sqrt(a)}
 
 @app.post("/api/percentage")
-def percentage(a,b,y=100):
+def percentage(a: float,b: float,y: float=100):
     return {"Result": (a*b/y)}
 
 @app.post("/api/power_of")
-def power_of(a,b):
+def power_of(a: float,b: float):
     return {"Result": (a**b)}
 
 #======== The REP Estimator =======
 @app.post("/api/rep_estimator")
-def one_rep_estimator(weight_kg, r):
+def one_rep_estimator(weight_kg: float, r: float):
     return {"Result": round(weight_kg*(1+r/30),2)}
