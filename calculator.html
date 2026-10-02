@@ -241,6 +241,31 @@
             gap: 16px;
         }
 
+        .operation-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .operation-grid button {
+            min-height: 54px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1.25rem;
+        }
+
+        .calculator-result {
+            min-height: 56px;
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--panel-soft);
+            color: var(--text);
+            font-weight: 700;
+        }
+
         .field {
             display: grid;
             gap: 8px;
@@ -390,6 +415,12 @@
             }
         }
 
+        @media (max-width: 480px) {
+            .operation-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
         button:hover {
             transform: translateY(-1px);
         }
@@ -527,16 +558,25 @@
                     <div class="panel-grid">
                         <section class="panel">
                             <h3>Calculator Interface</h3>
-                            <div class="form-grid">
+                            <div class="form-grid" id="calculator">
                                 <div class="field">
                                     <label for="calc-a">First Number</label>
-                                    <input id="calc-a" type="number" placeholder="Enter first number" />
+                                    <input id="calc-a" type="number" step="any" placeholder="Enter first number" />
                                 </div>
                                 <div class="field">
                                     <label for="calc-b">Second Number</label>
-                                    <input id="calc-b" type="number" placeholder="Enter second number" />
+                                    <input id="calc-b" type="number" step="any" placeholder="Enter second number" />
                                 </div>
-                                <button type="button">Calculate</button>
+                                <div class="operation-grid" aria-label="Calculator operations">
+                                    <button type="button" id="addition" aria-label="Addition" title="Addition">+</button>
+                                    <button type="button" id="subtraction" aria-label="Subtraction" title="Subtraction">−</button>
+                                    <button type="button" id="multiplication" aria-label="Multiplication" title="Multiplication">×</button>
+                                    <button type="button" id="division" aria-label="Division" title="Division">÷</button>
+                                    <button type="button" id="square_root" aria-label="Square root" title="Square root">√</button>
+                                    <button type="button" id="percentage" aria-label="Percentage" title="Percentage">%</button>
+                                    <button type="button" id="power_of" aria-label="Power" title="Power">^</button>
+                                </div>
+                                <div id="calculator-result" class="calculator-result" aria-live="polite">Choose an operation.</div>
                             </div>
                         </section>
 
@@ -561,7 +601,7 @@
                         <section class="panel">
                             <h3>Calculate Body Mass Index</h3>
 
-                            <form id="bmi-form" class="form-grid">
+                            <form id="bmi-form" class="form-grid" onsubmit="return false;">
                                 <div class="field">
                                     <label for="weight">Weight (kg)</label>
                                     <input id="weight" name="weight" type="number" min="0" step="0.1" placeholder="Enter your weight" required />
@@ -707,7 +747,8 @@
         }).format(today).replace(',', '');
 
         menuItems.forEach(item => {
-            item.addEventListener('click', () => {
+            item.addEventListener('click', (event) => {
+                event.preventDefault();
                 const target = item.dataset.section;
 
                 menuItems.forEach(menuItem => {
