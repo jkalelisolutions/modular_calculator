@@ -7,7 +7,12 @@
         "Normal Weight",
         "Overweight",
         "Overweight",
-        "Obese"
+        "Obese",
+        "Normal Weight",
+        "Normal Weight",
+        "Obese",
+        "Underweight",
+        "Normal Weight"
     ],
     "weekly_Report": [
         {
