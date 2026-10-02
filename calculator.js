@@ -64,6 +64,7 @@ const loadAndDisplayTable = async () => {
         // Assuming your backend returns {"BMI_Records": ["Overweight", "Normal Weight"]}
         renderCheckinsTable(data.BMI_Records, "bmi-container");
         renderCheckinsTable(data.weekly_Report, "weekly-container");
+        //renderCheckinsTable(data.Protocol, "protocol-container");
     } catch (error) {
         console.error("Failed to load records:", error);
     }
@@ -71,20 +72,22 @@ const loadAndDisplayTable = async () => {
  
 //======== Calculate Body Mass Index ========
 
-
+const form = document.getElementById("bmi-form");
 //button to show the BMI checker form
 const bmiCheckerButton = document.getElementById("bmi-checker");
 bmiCheckerButton.addEventListener("click", (event) => {
-    
+   
    event.preventDefault(); 
+   
    form.style.display = "block"; // Show the form when the button is clicked
 
 });
 //Creation of the form that will take the weight and height of the user and send it to the backend for BMI calculation
-const form = document.getElementById("bmi-form");
+
 
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    console.log("BMI Checker button clicked");
     const weight = Number(document.getElementById("weight").value);
     const height = Number(document.getElementById("height").value);
     if (!weight || !height) {
@@ -106,9 +109,51 @@ const CalculateBMI = async (weight_kg, height_m) => {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
     const result = await response.json();
-    const html = `<p>Your BMI is: ${result.bmi}</p><p>BMI Category: ${result.category}</p>`;
+    const html = `<p>Your BMI is: ${result.bmi}</p><br><p>BMI Category: ${result.category}</p>`;
     document.getElementById("bmi-result").innerHTML = html;
 }
+
+//======= A seamless calculator operation that listens to the button clicked and uses its id to form operations
+const calculator = document.getElementById("calculator");
+calculator.addEventListener("click", async (event) => {
+    event.preventDefault();
+    const button = event.target.closest("button[id]");
+    if (!button) return;
+    const operation = button.id;
+    const aInput = Number(document.getElementById("calc-a").value.trim());
+    const bInput = Number(document.getElementById("calc-b").value.trim());
+    if (!aInput || !bInput) {
+        alert("Please enter valid values for both fields.");
+        return;
+    }
+
+    if (operation === "square_root"){
+        alert("Square root operation only requires the first number. The second number will be ignored.");
+        return;
+    }
+    await calculate(operation, aInput, bInput);
+    
+});
+
+//Operation ID  fetches the correct backend API to perform the task
+async function calculate(operation,a,b) {
+    const params = new URLSearchParams({a: String(a)});
+    if (operation !== "square_root") {
+        params.set("b", String(b));
+    }
+    //API matches the name of operation with the right URL
+    const response = await fetch(`${API_BASE}/api/${operation}?${params.toString()}`, {method: "POST"});
+    const result = await response.json();
+    const output = document.getElementById("calculator-result");
+    
+    if (!response.ok) {
+        output.textContent = result.detail ?? "Calculation failed."
+        return;
+    }
+    output.textContent = `Result: ${result.Result}`
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
     loadAndDisplayTable();
     const weight = Number(document.getElementById("weight").value);
@@ -116,4 +161,5 @@ document.addEventListener("DOMContentLoaded", () => {
     if (weight && height) {
         CalculateBMI(weight, height)
     };
+
 });
