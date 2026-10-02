@@ -87,7 +87,7 @@ bmiCheckerButton.addEventListener("click", (event) => {
 
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    console.log("BMI Checker button clicked");
+    
     const weight = Number(document.getElementById("weight").value);
     const height = Number(document.getElementById("height").value);
     if (!weight || !height) {
