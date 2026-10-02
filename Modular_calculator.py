@@ -106,42 +106,59 @@ def weekly_step_summary(steps_list, goal=8000):
 #======== Check Protocol Summary ========
 @app.get("/api/protocol")
 def protocol_summary(plist):
+    data=load_checkins()
+    if not isinstance(data,dict):
+        data={"Protocol":[]}
+    if not isinstance(data.get("Protocol"),list):
+        data["Protocol"]=[]
     unique = list(set(plist))
     summary = {}
     for p in unique:
         summary[p] = plist.count(p)
-    return summary
+    data["Protocol"].append(summary)
+    with open("calculator.json","w") as f:
+        json.dump(data,f,indent=4)
+    return {"Result": summary}
 
 #======== Math calculations ========
 @app.post("/api/addition")
 def addition(a,b):
-    return (a+b)
+    sum = (a+b)
+    return {"Result":sum}
 
 @app.post("/api/subtraction")
 def subtraction(a,b):
-    return (a-b)
+    sub = (a-b)
+    return {"Result":sub}
 
 @app.post("/api/multiplication")
 def multiplication(a,b):
-    return (a*b)
+    mult = (a*b)
+    return {"Result":mult}
 
 @app.post("/api/division")
 def division(a,b):
-    return (a/b)
+    if b == 0:
+        raise HTTPException(status_code=400, detail="Division by zero is not allowed.")
+    div = (a/b)
+    return {"Result":div}
 
 @app.post("/api/square_root")
 def square_root(a):
-    return math.sqrt(a)
+    if a < 0:
+        raise HTTPException(status_code=400, detail="Square root of negative number is not allowed.")
+    
+    return {"Result": math.sqrt(a)}
 
 @app.post("/api/percentage")
 def percentage(a,b,y=100):
-    return (a*b/y)
+    return {"Result": (a*b/y)}
 
 @app.post("/api/power_of")
 def power_of(a,b):
-    return (a**b)
+    return {"Result": (a**b)}
 
 #======== The REP Estimator =======
 @app.post("/api/rep_estimator")
 def one_rep_estimator(weight_kg, r):
-    return round(weight_kg*(1+r/30),2)
+    return {"Result": round(weight_kg*(1+r/30),2)}
