@@ -153,6 +153,30 @@ async function calculate(operation,a,b) {
     output.textContent = `Result: ${result.Result}`
 }
 
+const caloriechecker = document.getElementById("calorie-checker");
+caloriechecker.addEventListener("click", async () => {
+    const steps = Number(document.getElementById("steps").value);
+    if (!steps) {
+        alert("Please enter a valid number of steps.");
+        return;
+    }
+    await checkCalories(steps);
+});
+
+const checkCalories = async (steps) => {
+    const response = await fetch(`${API_BASE}/api/calories`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ steps })
+    });
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const result = await response.json();
+    document.getElementById("calorie-result").textContent = `Calories burned: ${result.calories} kcal`;
+};
 
 document.addEventListener("DOMContentLoaded", () => {
     loadAndDisplayTable();
