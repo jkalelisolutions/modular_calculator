@@ -22,6 +22,9 @@ class checkins(BaseModel):
     weight: int
     bmi: str
 
+class calories(BaseModel):
+    steps: int
+
 @app.get("/")
 def home():
     return{"Status Response: 200"
@@ -78,14 +81,15 @@ def calculate_bmi(weight_kg: float, height_m: float):
 
     
 #======== Calculate Calorie Estimate : Default;0.04 ========
-@app.get("/api/calories")
-def estimate_calories(steps, calorie_per_step= 0.04):
-    calories = steps*calorie_per_step
-    return math.floor(calories)
+@app.post("/api/calories")
+def estimate_calories(request: calories):
+    calories = request.steps * 0.04
 
+    return {"calories": math.floor(calories)}
+ 
 #======== Check Step Goal ========
-@app.get("/api/summary")
-def weekly_step_summary(steps_list, goal=8000):
+@app.post("/api/summary")
+def weekly_step_summary(steps_list: list, goal: int = 8000):
     new= load_checkins()
     if not isinstance(new,dict):
         new={"weekly_Report":[]}
@@ -104,8 +108,8 @@ def weekly_step_summary(steps_list, goal=8000):
     
 
 #======== Check Protocol Summary ========
-@app.get("/api/protocol")
-def protocol_summary(plist):
+@app.post("/api/protocol")
+def protocol_summary(plist: list):
     data=load_checkins()
     if not isinstance(data,dict):
         data={"Protocol":[]}
