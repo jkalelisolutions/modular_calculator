@@ -1,29 +1,9 @@
 {
     "BMI_Records": [
-        "Obese",
-        "Normal Weight",
-        "Obese",
-        "Normal Weight",
-        "Normal Weight",
-        "Overweight",
-        "Overweight",
-        "Obese",
-        "Normal Weight",
-        "Normal Weight",
-        "Obese",
-        "Underweight",
-        "Normal Weight",
-        "Underweight",
-        "Normal Weight",
-        "Obese",
-        "Underweight",
-        "Obese",
-        "Obese",
-        "Obese",
-        "Obese",
-        "Obese",
-        "Obese",
-        "Overweight"
+        {
+            "bmi": 34.0,
+            "category": "Obese"
+        }
     ],
     "weekly_Report": [
         {
