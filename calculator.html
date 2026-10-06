@@ -472,6 +472,13 @@
             color: var(--muted);
         }
 
+        .table-scroll {
+            max-height: 240px;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            margin-top: 10px;
+        }
+
         button:focus-visible {
             outline: 3px solid rgba(40, 123, 181, 0.35);
             outline-offset: 2px;
@@ -614,7 +621,7 @@
 
                                 <button type="submit">Calculate BMI</button>
                             </form>
-
+                            
                             <div id="bmi-result" aria-live="polite" style="margin-top: 18px;">Ready to calculate.</div>
                         </section>
 
