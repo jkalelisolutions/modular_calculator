@@ -1,24 +1,18 @@
 {
     "BMI_Records": [
         {
-            "bmi": 34.0,
-            "category": "Obese"
-        }
-    ],
-    "weekly_Report": [
-        {
-            "today": "28 Sep 26",
-            "days_hit": 4,
-            "average": 8194.3,
-            "best": 12500,
-            "worst": 2300
+            "bmi": 20.8,
+            "category": "Normal Weight"
         },
         {
-            "today": "28 Sep 26",
-            "days_hit": 4,
-            "average": 8552.7,
-            "best": 13500,
-            "worst": 2350
+            "bmi": 12.3,
+            "category": "Underweight"
+        },
+        {
+            "bmi": 17.3,
+            "category": "Underweight"
         }
-    ]
+    ],
+    "Protocol": [],
+    "weekly_Report": []
 }
