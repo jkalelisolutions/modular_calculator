@@ -67,14 +67,14 @@ def calculate_bmi(weight_kg: float, height_m: float):
      else:
             category= "Obese" 
      
-    
-     data["BMI_Records"].append(category)
+     result = {"bmi": res, "category": category}
+     data["BMI_Records"].append(result)
      with open("calculator.json","w") as f:
          try:
              json.dump(data,f,indent=4)
-             return {"bmi": res, "category": category}
+             return result
          except json.JSONDecodeError:return {"Failed to store data. Try again later"}
-     return {"bmi": res, "category": category}   
+     return {"bmi": res, "category": category}  
              
          
         
