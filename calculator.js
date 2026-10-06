@@ -24,46 +24,69 @@ const Checkin = async () => {
 
 const body = document.body;
 body.style.background = "#0000";
-function renderCheckinsTable(chekinsArray,containerID){
-    const container = document.getElementById(containerID);
-    if(!chekinsArray || chekinsArray.length === 0){
-        container.innerHTML = "<p>No check-in records available.</p>";
+const bmiColumns = [
+    { label: "#", value: (_, index) => index + 1 },
+    {label: "BMI Value", value: record => record.bmi},
+    { label: "BMI Category", value: record => record.category }
+];
+
+const weeklyColumns = [
+    { label: "Date", value: record => record.today },
+    { label: "Days Goal Hit", value: record => record.days_hit },
+    { label: "Average", value: record => record.average },
+    { label: "Best", value: record => record.best },
+    { label: "Worst", value: record => record.worst }
+];
+
+// The renderer should build its headers and cells from these columns.
+function renderTable(rows, containerId, columns) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    if (!Array.isArray(rows) || rows.length === 0) {
+        container.innerHTML = "<p>No records available.</p>";
         return;
     }
-    let tableHTML = `
-    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-            <thead>
-                <tr style="background-color: #352f2f; text-align: left;">
-                    <th style="padding: 8px; border: 1px solid #2e2626;">#</th>
-                    <th style="padding: 8px; border: 1px solid #e6dcdc;">BMI Category</th>
-                </tr>
-            </thead>
-            <tbody>
 
-`;
-    chekinsArray.forEach((record,index) => {
-        tableHTML+=`
+    const headers = columns
+        .map(column => `<th>${column.label}</th>`)
+        .join("");
+
+    const body = rows.map((row, index) => `
         <tr>
-                <td style="padding: 8px; border: 1px solid #241616;">${index + 1}</td>
-                <td style="padding: 8px; border: 1px solid #260c0c;">${record}</td>
-            </tr>
-        `;
-        
-    });
+            ${columns.map(column =>
+                `<td>${column.value(row, index) ?? ""}</td>`
+            ).join("")}
+        </tr>
+    `).join("");
 
-    tableHTML+=`
-    </tbody>
-    </table>`;
-    container.innerHTML = tableHTML;
+    container.innerHTML = `
+        <div class="table-scroll">
+            <table>
+                <thead><tr>${headers}</tr></thead>
+                <tbody>${body}</tbody>
+            </table>
+        </div>
+    `;
+}
 
+const weeklysummary = async (steps,goal)=> {
+    const response = await fetch(`${API_BASE}/api/summary?steps=${steps}&goal=${goal}`,{
+        method: "POST",
+        headers: {"Content-Type":"application/json"}
+    })
+    
+    if (!response.ok){
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
 }
 
 const loadAndDisplayTable = async () => {
     try {
         const data = await Checkin(); 
         // Assuming your backend returns {"BMI_Records": ["Overweight", "Normal Weight"]}
-        renderCheckinsTable(data.BMI_Records, "bmi-container");
-        renderCheckinsTable(data.weekly_Report, "weekly-container");
+        renderTable(data.BMI_Records, "bmi-container", bmiColumns);
+        renderTable(data.weekly_Report, "weekly-container", weeklyColumns);
         //renderCheckinsTable(data.Protocol, "protocol-container");
     } catch (error) {
         console.error("Failed to load records:", error);
