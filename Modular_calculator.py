@@ -5,6 +5,8 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 import os
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from datetime import date
@@ -12,10 +14,13 @@ from datetime import date
 app=FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://modular-calculator.onrender.com"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 checkin=[]
 class checkins(BaseModel):
     height: int
@@ -27,8 +32,7 @@ class calories(BaseModel):
 
 @app.get("/")
 def home():
-    return{"Status Response: 200"
-           "Calculator API is running."}
+    return FileResponse("static/index.html")
 
 @app.get("/api/checkin")
 def load_checkins():
